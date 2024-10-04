@@ -1,0 +1,123 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #221B16;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+#app {
+    display: grid;
+    grid-template-areas:    "logo logo logo" 
+                            "empty eq slider"
+                            "emoji emoji emoji"
+                            "timer timer timer";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-row-gap: 0.5rem;
+    place-items: center;
+}
+
+.eq {
+    grid-area: eq;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column-reverse;
+    grid-gap: 0.25rem;
+}
+
+.eq > li {
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.light {
+    flex: 1 1 auto;
+    height: 0.25rem;
+    width: 1.5rem;
+    border-radius: 0.125rem;
+    background-color: #36363A;
+    transition: 100ms background-color linear;
+}
+
+.light.on {
+background-color: aqua;
+}
+
+.light.low.on {
+    background-color: #5EF381;
+}
+
+.light.medium.on {
+    background-color: #EDDE5B;
+}
+
+.light.high.on {
+    background-color: #DB784D;
+}
+
+.emoji {
+    grid-area: emoji;
+    font-size: 1.5rem;;
+}
+
+.logo {
+    grid-area: logo;
+    width: 138px;
+    height: auto;
+    padding-bottom: 0.5rem;
+}
+
+.timer {
+    grid-area: timer;
+    display: flex;
+    gap: 0.25rem;
+    margin: 0;
+    line-height: 1rem;
+    justify-self: stretch;
+    align-items: baseline;
+}
+
+.timer .value {
+    font-size: 1rem;
+    flex: 1 1 54%;
+    text-align: right;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.timer .unit {
+    font-size: 0.75rem;
+    flex: 1 1 46%;
+    color: rgba(255, 255, 255, 0.4);
+}
