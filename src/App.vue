@@ -30,7 +30,7 @@ export default {
 
     computed: {
         volume() {
-            return Math.ceil(this.rawVolume / 16);
+            return Math.floor(this.rawVolume / 16);
         }
     },
 
