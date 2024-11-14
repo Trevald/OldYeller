@@ -6,6 +6,10 @@ import { TALKING, SCREAMING } from "../config.js";
 
 export default {
     props: {
+        threshold: {
+            type: Number,
+            default: 0
+        },
         volume: {
             type: Number,
             required: true

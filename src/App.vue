@@ -1,7 +1,8 @@
 <template>
     <AppLogo />
     <AppEq :volume="volume" />
-    <AppEmoji :volume="volume" />
+    <AppSlider :value="threshold" @change="adjustThreshold($event, data)" />
+    <AppEmoji :volume="volume" :threshold="threshold" />
     <AppTimer :volume="volume" />
 </template>
 
@@ -10,12 +11,16 @@ import AppEmoji from "./components/AppEmoji.vue";
 import AppEq from "./components/AppEq.vue";
 import AppLogo from "./components/AppLogo.vue";
 import AppTimer from "./components/AppTimer.vue";
+import AppSlider from "./components/AppSlider.vue";
+
+import { TALKING } from "./config";
 
 export default {
     components: {
         AppEmoji,
         AppEq,
         AppLogo,
+        AppSlider,
         AppTimer
     },
 
@@ -23,32 +28,34 @@ export default {
         return {
             analyser: undefined,
             dataArray: undefined,
-            limit: 16,
+            threshold: 2,
             rawVolume: 0
         };
     },
 
     computed: {
         volume() {
-            return Math.floor(this.rawVolume / 16);
+            const volume = Math.floor(this.rawVolume / 16);
+            if (volume > TALKING) {
+                return volume + this.threshold;
+            }
+            return volume;
         }
     },
 
     methods: {
+        adjustThreshold(data) {
+            this.threshold = data;
+        },
+
         handleAudioStream(stream) {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-            // Skapa en källnod för mikrofonströmmen
             const microphone = audioContext.createMediaStreamSource(stream);
 
-            // Skapa en analyseringsnod
             this.analyser = audioContext.createAnalyser();
             this.analyser.fftSize = 256;
 
-            // Koppla mikrofonen till analysatorn
             microphone.connect(this.analyser);
-
-            // Skapa en array för att lagra frekvensdata
             this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
 
             this.getVolume();
@@ -60,7 +67,6 @@ export default {
             }
             this.analyser.getByteFrequencyData(this.dataArray);
 
-            // Beräkna genomsnittet av frekvensdata (där volymen mäts)
             let values = 0;
             for (let i = 0; i < this.dataArray.length; i++) {
                 values += this.dataArray[i];
@@ -76,7 +82,6 @@ export default {
 
     mounted() {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            // Få tillgång till mikrofonen
             navigator.mediaDevices
                 .getUserMedia({ audio: true })
                 .then((stream) => this.handleAudioStream(stream))

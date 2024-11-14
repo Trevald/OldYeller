@@ -18,7 +18,6 @@ export default {
 
     watch: {
         volume(newValue, oldValue) {
-            console.log(newValue);
             if (newValue > TALKING && this.timer === undefined) {
                 return this.startTimer();
             }
@@ -61,12 +60,12 @@ export default {
 
         pauseTimer() {
             if (this.timerForPause) {
-                return;
+                // return;
             }
             clearTimeout(this.timerForPause);
             this.timerForPause = setTimeout(() => {
                 this.stopTimer();
-            }, 1000);
+            }, 3000);
         },
 
         stopTimer() {
